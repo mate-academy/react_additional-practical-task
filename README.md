@@ -9,7 +9,7 @@
    - `id` is the largest id in the array `+ 1`. Creat a function for getting correct id;
    - Clear form fields after form submission;
 
-Additional options:
+Additional requirements:
 1. (* **Optional**) Add validation to the form
    - add a default empty option `Choose a category` to the select;
    - if the `name` is empty, show an error message next to the `name` field (`Please enter a name`);

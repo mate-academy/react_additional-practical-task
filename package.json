@@ -52,5 +52,13 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "mateAcademy": {
+    "_comment": "Replace 'reactTypescript' with 'react' if you want use React without Typescript",
+    "projectType": "reactTypescript",
+    "tests": {
+      "_comment": "Add `cypressComponents: true` to enable component tests",
+      "cypress": true
+    }
   }
 }

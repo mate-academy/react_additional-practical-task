@@ -85,12 +85,6 @@ export const App: React.FC = () => {
                   Category
                 </span>
               </th>
-
-              <th>
-                <span className="is-flex is-flex-wrap-nowrap">
-                  Remove
-                </span>
-              </th>
             </tr>
           </thead>
 
@@ -105,15 +99,6 @@ export const App: React.FC = () => {
                 {product.category?.title && (
                   <td>{product.category?.title}</td>
                 )}
-
-                <td>
-                  <button
-                    type="button"
-                    className="button is-danger is-light"
-                  >
-                    X
-                  </button>
-                </td>
               </tr>
             ))}
           </tbody>

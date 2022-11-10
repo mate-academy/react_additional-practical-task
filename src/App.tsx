@@ -23,9 +23,9 @@ const productsWithCategories: ProductWithCategory[] = productsFromServer.map(
 );
 
 export const App: React.FC = () => {
-  const [products, setProducts] = useState<ProductWithCategory[]>(productsWithCategories);
+  const [products, setProducts] = useState(productsWithCategories);
 
-  const handleAddNewProduct = (product: any) => {
+  const handleAddNewProduct = (product: ProductWithCategory) => {
     setProducts(currentProducts => [...currentProducts, product]);
   }
 

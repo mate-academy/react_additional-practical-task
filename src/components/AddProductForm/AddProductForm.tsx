@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import categoriesFromServer from '../../api/categories';
 import { ProductWithCategory } from '../../types/ProductWithCategory';
 
 interface Props {
@@ -10,20 +11,31 @@ interface Props {
 
 export const AddProductForm: React.FC<Props> = ({ onAddNewProduct, generateProductId, generateCategoryId }) => {
   const [productName, setProductName] = useState('');
-  const [category, setCategory] = useState('');
+  const [categoryId, setCategoryId] = useState(1);
 
-  const submitProductForm = () => {
+  const getCategory = () => {
+    return categoriesFromServer.find(category => category.id === categoryId);
+  }
+
+  const resetFields = () => {
+    setProductName('');
+    setCategoryId(1);
+  }
+
+  const submitProductForm = (event: React.FormEvent) => {
+    event.preventDefault();
+
     const productId = generateProductId();
     const categoryId = generateCategoryId();
 
-    const newProduct = {
+    onAddNewProduct({
       id: productId,
       name: productName,
       categoryId,
-      category,
-    }
+      category: getCategory() || null,
+    })
 
-    onAddNewProduct({newProduct})
+    resetFields();
   }
 
   return (
@@ -47,13 +59,19 @@ export const AddProductForm: React.FC<Props> = ({ onAddNewProduct, generateProdu
         <div className="control">
           <div className="select">
             <select
-              onChange={event => setCategory(event.target.value)}
+              value={categoryId}
+              onChange={event => {
+                setCategoryId(+event.target.value)
+              }}
             >
-              <option>Grocery</option>
-              <option>Drinks</option>
-              <option>Fruits</option>
-              <option>Electronics</option>
-              <option>Clothes</option>
+              {categoriesFromServer.map(category => (
+                <option
+                  key={category.id}
+                  value={category.id}
+                >
+                  {category.title}
+                </option>
+              ))}
             </select>
           </div>
         </div>

@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.scss';
 import { ProductWithCategory } from './types/ProductWithCategory';
+import { ProductTable } from './components/ProductTable';
+import { AddProductForm } from './components/AddProductForm';
 
 import productsFromServer from './api/products';
 import categoriesFromServer from './api/categories';
@@ -21,48 +23,29 @@ const productsWithCategories: ProductWithCategory[] = productsFromServer.map(
 );
 
 export const App: React.FC = () => {
+  const [quere, setQuere] = useState('');
+  const [select, setSelect] = useState('Grocery');
+  const [products, setProducts] = useState<ProductWithCategory[]>(productsWithCategories);
+
+  const reset = () => {
+    setSelect('Grocery');
+    setQuere('');
+  }
+  const max = () => {
+    Math.max(...(products.map(p => p.id))) + 1;
+  }
+  
   return (
     <div className="section">
       <div className="container">
         <h1 className="title">Product Categories</h1>
 
-        <form className="form">
-          <div className="field">
-            <div className="control">
-              <input
-                className="input"
-                type="text"
-                placeholder="product name"
-              />
-            </div>
-          </div>
-
-          <div className="field">
-            <div className="control">
-              <div className="select">
-                <select>
-                  <option>Grocery</option>
-                  <option>Drinks</option>
-                  <option>Fruits</option>
-                  <option>Electronics</option>
-                  <option>Clothes</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <div className="field is-grouped">
-            <div className="control">
-              <button
-                type="submit"
-                className="button is-link"
-              >
-                Submit
-              </button>
-            </div>
-          </div>
-        </form>
-
+        <AddProductForm
+          title={quere}
+          setQuere={setQuere}
+          setSelect={setSelect}
+          reset={reset}
+        />
         <table
           className="table is-striped is-narrow is-fullwidth"
         >
@@ -88,20 +71,7 @@ export const App: React.FC = () => {
             </tr>
           </thead>
 
-          <tbody>
-            {productsWithCategories.map(product => (
-              <tr key={product.id}>
-                <td className="has-text-weight-bold">
-                  {product.id}
-                </td>
-                <td>{product.name}</td>
-
-                {product.category?.title && (
-                  <td>{product.category?.title}</td>
-                )}
-              </tr>
-            ))}
-          </tbody>
+          <ProductTable products={products} />
         </table>
       </div>
     </div>

@@ -13,7 +13,7 @@ export const AddProductForm: React.FC<Props> = ({ onSubmit }) => {
   return (
     <form
       className="form"
-      onSubmit={() => {onSubmit}}
+      onSubmit={() => {onSubmit(productName, +productCategory)}}
     >
       <div className="field">
         <div className="control">

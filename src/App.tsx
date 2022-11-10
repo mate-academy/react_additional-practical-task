@@ -35,14 +35,14 @@ export const App: React.FC = () => {
   })
 
   const onSubmit = (name: string, categoryId: number) => {
-    setProducts((cur) => {
-      [...cur, {
-        id: biggestId,
+    setProducts(
+      [...products, {
+        id: biggestId + 1,
         name,
         categoryId,
         category: findCategoryById(categoryId),
       }]
-    })
+    )
   };
 
   return (

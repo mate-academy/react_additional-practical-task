@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.scss';
 import { ProductWithCategory } from './types/ProductWithCategory';
 
 import productsFromServer from './api/products';
 import categoriesFromServer from './api/categories';
+import { ProductTable } from './components/ProductTable';
+import { AddProductForm } from './components/AddProductForm';
 
 const findCategoryById = (categoryId: number) => {
   const foundCategory = categoriesFromServer.find(category => (
@@ -21,88 +23,46 @@ const productsWithCategories: ProductWithCategory[] = productsFromServer.map(
 );
 
 export const App: React.FC = () => {
+  const [visibleProducts, setVisibleProducts] = useState<ProductWithCategory[]>(productsWithCategories);
+  const [selectedCategory, setselectedCategory] = useState(0);
+  const [query, setQuery] = useState('');
+
+  const handleChangeInput = (value: string) => {
+    setQuery(value);
+  };
+
+  const handleCategory = (value: number) => {
+    setselectedCategory(value);
+  }
+
+  const findCategory = categoriesFromServer.find(category => category.id === selectedCategory);
+
+  const handleSubmitButton = (event: MouseEvent) => {
+    event.preventDefault;
+
+    const newProduct = {
+      id: new Date(),
+      name: query,
+      categoryId: selectedCategory,
+      category: findCategory,
+    }
+
+    return setVisibleProducts((currentProduct) => [...currentProduct, newProduct])
+  }
+
   return (
     <div className="section">
       <div className="container">
         <h1 className="title">Product Categories</h1>
-
-        <form className="form">
-          <div className="field">
-            <div className="control">
-              <input
-                className="input"
-                type="text"
-                placeholder="product name"
-              />
-            </div>
-          </div>
-
-          <div className="field">
-            <div className="control">
-              <div className="select">
-                <select>
-                  <option>Grocery</option>
-                  <option>Drinks</option>
-                  <option>Fruits</option>
-                  <option>Electronics</option>
-                  <option>Clothes</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <div className="field is-grouped">
-            <div className="control">
-              <button
-                type="submit"
-                className="button is-link"
-              >
-                Submit
-              </button>
-            </div>
-          </div>
-        </form>
-
-        <table
-          className="table is-striped is-narrow is-fullwidth"
-        >
-          <thead>
-            <tr>
-              <th>
-                <span className="is-flex is-flex-wrap-nowrap">
-                  ID
-                </span>
-              </th>
-
-              <th>
-                <span className="is-flex is-flex-wrap-nowrap">
-                  Product
-                </span>
-              </th>
-
-              <th>
-                <span className="is-flex is-flex-wrap-nowrap">
-                  Category
-                </span>
-              </th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {productsWithCategories.map(product => (
-              <tr key={product.id}>
-                <td className="has-text-weight-bold">
-                  {product.id}
-                </td>
-                <td>{product.name}</td>
-
-                {product.category?.title && (
-                  <td>{product.category?.title}</td>
-                )}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <AddProductForm
+         categoriesFromServer={categoriesFromServer}
+          handleChangeInput={handleChangeInput}
+          query={query}
+          handleCategory={handleCategory}
+          selectedCategory={selectedCategory}
+          handleSubmitButton={handleSubmitButton}
+         />
+        <ProductTable visibleProducts={visibleProducts}/>
       </div>
     </div>
   );

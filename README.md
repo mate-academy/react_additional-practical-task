@@ -1,12 +1,12 @@
 # React Additional Practical Task
 
-1. Move table with products to the separate component `ProductTable.tsx`;
-2. Move form to the separate component `AddProductForm.tsx`;
+<!-- 1. Move table with products to the separate component `ProductTable.tsx`; -->
+<!-- 2. Move form to the separate component `AddProductForm.tsx`; -->
 3. Make it possible to add new products with categories to the table:
-   - Make input `product name` controlled;
-   - Make select `categories` controlled;
-   - Add function for add new product on form submit. Each product should have (`id`, `name`, `categoryId`, `category`);
-   - `id` is the largest id in the array `+ 1`. Creat a function for getting correct id;
+   <!-- - Make input `product name` controlled; -->
+   <!-- - Make select `categories` controlled; -->
+   <!-- - Add function for add new product on form submit. Each product should have (`id`, `name`, `categoryId`, `category`); -->
+   <!-- - `id` is the largest id in the array `+ 1`. Creat a function for getting correct id; -->
    - Clear form fields after form submission;
 
 Additional requirements:

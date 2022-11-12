@@ -9,14 +9,30 @@ type Props = {
 
 export const AddProductForm: React.FC<Props> = ({ addNewProduct }) => {
   const [query, setQuery] = useState('');
-  const [categorySelected, setCategorySelected] = useState(0);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(0);
 
-  const onHandleSelect = (event: ) => {
-    setCategorySelected(+event.target.value)
+  const onHandleSelect = (event: React.ChangeEvent<HTMLSelectElement> ) => {
+    setSelectedCategoryId(+event.target.value);
   }
 
+  const onHandleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const trimedQery = query.trim();
+
+    if (trimedQery.length && selectedCategoryId) {
+      addNewProduct(trimedQery, selectedCategoryId);
+    }
+
+    setQuery('');
+    setSelectedCategoryId(0);
+  };
+
   return (
-    <form className="form">
+    <form
+      className="form"
+      onSubmit={onHandleSubmit}
+    >
       <div className="field">
         <div className="control">
           <input
@@ -32,7 +48,9 @@ export const AddProductForm: React.FC<Props> = ({ addNewProduct }) => {
       <div className="field">
         <div className="control">
           <div className="select">
-            <select onChange={onHandleSelect}>
+            <select
+              value={selectedCategoryId}
+              onChange={onHandleSelect}>
               <option value={0}>
                 Please select category
               </option>

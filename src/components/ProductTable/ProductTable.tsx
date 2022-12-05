@@ -1,8 +1,8 @@
 import React from "react";
-import { Product } from "../../types/Product"
+import { Product } from "../../types/Product";
 import productsFromServer from '../../api/products';
-import categoriesFromServer from '../../api/categories'
-import { ProductWithCategory } from '../../types/ProductWithCategory'
+import categoriesFromServer from '../../api/categories';
+import { ProductWithCategory } from '../../types/ProductWithCategory';
 
 type Props = {
   products: Product[],
@@ -16,7 +16,7 @@ const findCategoryById = (categoryId: number) => {
   return foundCategory || null;
 };
 
-const productsWithCategories: ProductWithCategory[] = productsFromServer.map(
+export const productsWithCategories: ProductWithCategory[] = productsFromServer.map(
   (product) => ({
     ...product,
     category: findCategoryById(product.categoryId),
@@ -60,7 +60,7 @@ export const ProductTable: React.FC<Props> = () => {
           <td>{product.name}</td>
 
           {product.category?.title && (
-            <td>{product.category?.title}</td>
+            <td>{`${product.category?.title} ${product.category?.icon}`}</td>
           )}
         </tr>
       ))}

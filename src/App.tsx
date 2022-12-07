@@ -1,38 +1,57 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.scss';
-import { ProductWithCategory } from './types/ProductWithCategory';
-
-import productsFromServer from './api/products';
 import categoriesFromServer from './api/categories';
-
-const findCategoryById = (categoryId: number) => {
-  const foundCategory = categoriesFromServer.find(category => (
-    category.id === categoryId
-  ));
-
-  return foundCategory || null;
-};
-
-const productsWithCategories: ProductWithCategory[] = productsFromServer.map(
-  (product) => ({
-    ...product,
-    category: findCategoryById(product.categoryId),
-  }),
-);
+import { ProductTable } from './components/ProductTable';
+import { Product } from './types/Product';
+import { Category } from './types/Category'
+import { productsWithCategories } from './components/ProductTable/ProductTable'
 
 export const App: React.FC = () => {
+  const [categoryId, setCategoryId] = useState(1);
+  const [name, setName] = useState('');
+  const [currProducts, setCurrProducts] = useState(productsWithCategories);
+
+  const getNewProductID = (prevProducts: Product[]) => {
+    return Math.max(...prevProducts.map(product => product.id)) + 1;
+  };
+
+  function getCategoryById(categoryId: number): Category | null {
+    return categoriesFromServer.find(category => category.id === categoryId) || null;
+  }
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const newProduct = {
+      id: getNewProductID(currProducts),
+      name,
+      categoryId,
+      category: getCategoryById(categoryId),
+    };
+
+    setCurrProducts(currProducts => ([
+      ...currProducts,
+      newProduct,
+    ]));
+
+    setCategoryId(1);
+    setName('');
+  };
+
   return (
     <div className="section">
       <div className="container">
         <h1 className="title">Product Categories</h1>
 
-        <form className="form">
+        <form className="form" onSubmit={handleSubmit}>
           <div className="field">
             <div className="control">
               <input
                 className="input"
                 type="text"
                 placeholder="product name"
+                value={name}
+                onChange={(event) => setName(event.target.value)}
               />
             </div>
           </div>
@@ -40,16 +59,15 @@ export const App: React.FC = () => {
           <div className="field">
             <div className="control">
               <div className="select">
-                <select>
-                  <option>Grocery</option>
-                  <option>Drinks</option>
-                  <option>Fruits</option>
-                  <option>Electronics</option>
-                  <option>Clothes</option>
+                <select value={categoryId} onChange={(event) => setCategoryId(+event.target.value)}>
+                  {categoriesFromServer.map(category =>
+                    <option value={category.id} key={category.id}>{category.title}</option>
+                  )}
                 </select>
               </div>
             </div>
           </div>
+
 
           <div className="field is-grouped">
             <div className="control">
@@ -63,46 +81,7 @@ export const App: React.FC = () => {
           </div>
         </form>
 
-        <table
-          className="table is-striped is-narrow is-fullwidth"
-        >
-          <thead>
-            <tr>
-              <th>
-                <span className="is-flex is-flex-wrap-nowrap">
-                  ID
-                </span>
-              </th>
-
-              <th>
-                <span className="is-flex is-flex-wrap-nowrap">
-                  Product
-                </span>
-              </th>
-
-              <th>
-                <span className="is-flex is-flex-wrap-nowrap">
-                  Category
-                </span>
-              </th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {productsWithCategories.map(product => (
-              <tr key={product.id}>
-                <td className="has-text-weight-bold">
-                  {product.id}
-                </td>
-                <td>{product.name}</td>
-
-                {product.category?.title && (
-                  <td>{product.category?.title}</td>
-                )}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <ProductTable products={currProducts} />
       </div>
     </div>
   );

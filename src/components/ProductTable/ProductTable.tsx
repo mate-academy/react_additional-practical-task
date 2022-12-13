@@ -1,9 +1,9 @@
 import React from "react";
 
-import { Product } from '../../types/Product'
+import { ProductWithCategory } from '../../types/ProductWithCategory'
 
 type Props = {
-  products: Product[]
+  products: ProductWithCategory[]
 }
 
 export const ProductTable: React.FC<Props> = ({ products }) => {
@@ -14,15 +14,25 @@ export const ProductTable: React.FC<Props> = ({ products }) => {
     >
 
       <thead>
-        {products.map(product => (
-          <tr>
-            <th>
-              <span className="is-flex is-flex-wrap-nowrap">
-                {product.category.title}
-              </span>
-            </th>
-          </tr>
-        ))}
+        <tr>
+          <th>
+            <span className="is-flex is-flex-wrap-nowrap">
+              ID
+            </span>
+          </th>
+
+          <th>
+            <span className="is-flex is-flex-wrap-nowrap">
+              Product
+            </span>
+          </th>
+
+          <th>
+            <span className="is-flex is-flex-wrap-nowrap">
+              Category
+            </span>
+          </th>
+        </tr>
       </thead>
 
       <tbody>
@@ -34,7 +44,7 @@ export const ProductTable: React.FC<Props> = ({ products }) => {
             <td>{product.name}</td>
 
             {product.category?.title && (
-              <td>{product.category?.title}</td>
+              <td>{`${product.category.icon} - ${product.category?.title}`}</td>
             )}
           </tr>
         ))}

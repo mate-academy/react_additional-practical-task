@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.scss';
 import { ProductWithCategory } from './types/ProductWithCategory';
 
@@ -23,15 +23,27 @@ const productsWithCategories: ProductWithCategory[] = productsFromServer.map(
 );
 
 export const App: React.FC = () => {
+  const [products, setProducts] = useState(productsWithCategories);
+
+  const addProduct = (product: ProductWithCategory) => {
+    setProducts(prevProducts => ([
+      ...prevProducts,
+      product,
+    ]));
+  };
+
   return (
     <div className="section">
       <div className="container">
         <h1 className="title">Product Categories</h1>
 
-        <AddProductForm />
+        <AddProductForm
+          onAdd={addProduct}
+          products={products}
+        />
 
-        <ProductTable 
-          products={productsWithCategories}
+        <ProductTable
+          products={products}
         />
       </div>
     </div>
